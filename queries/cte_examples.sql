@@ -84,3 +84,23 @@ having mushteri_sayi>10
 order by mushteri_sayi desc;
 
 
+
+select country,type,title, year(date_added),
+case when duration like "%season%"then  500* CAST(REPLACE(duration,' Season','') AS SIGNED)
+ when duration like "%seasons%"then  500* CAST(REPLACE(duration,' Seasons','') AS SIGNED)
+when  duration like "%min%" then CAST(REPLACE(duration,'min','')AS SIGNED)
+else "xeta var" end duration_temiz
+from netflix;
+
+with base as(select
+case when duration like "%season%"then  500* CAST(REPLACE(duration,' Seasons','') AS SIGNED)
+when  duration like "%min%" then CAST(REPLACE(duration,'min','')AS SIGNED)
+else "xeta var" end duration_temiz, country, type, show_id
+from netflix)
+select country, type,count(distinct show_id) verlish_sayi, sum(duration_temiz) toplam_verlish_muddetideq
+from base
+group by 1,2;
+
+
+
+
